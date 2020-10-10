@@ -25,6 +25,13 @@ class CreateOrkaAnsibleInventory:
 
 
     def get_current_vm_data(self):
+        """Get current VM data related to the current CLI user.
+
+        Note
+        ----
+
+        The user must be logged in to the Orka CLI.
+        """
         completed_process = subprocess.run(
             ['orka', 'vm', 'list', '--json'], 
             capture_output=True)
@@ -34,11 +41,34 @@ class CreateOrkaAnsibleInventory:
 
 
     def sort_vm_data(self, sort_key):
+        """Sort current VM data related to the current CLI user.
+        
+        Parameters
+        ----------
+        
+        sort_key: str
+            One of the `sort_key` values listed in the README.
+            
+        Note
+        ----
+        
+        `sort_key` is passed as a command line arg with the flag
+        `--sort-key`. See README for example usage.
+        """
         self.sorted_data = sorted(
             self.vm_data, key = lambda vm: vm['status'][0][sort_key])
 
 
     def write_inventory(self, data):
+        """Write current VM data -- sorted or not -- to an 
+        Ansible inventory file.
+        
+        Parameters
+        ----------
+        
+        data: list
+            A list of Python dicts that represent Orka VMs.
+        """
         inventory_path = os.path.join(self.output_dir, 'inventory')
         with open(inventory_path, 'w+') as f:
             f.write(self.connection_info)
@@ -55,15 +85,11 @@ if __name__ == '__main__':
     parser.add_argument('output_dir', 
         help='The path to the directory \
         where the inventory file will be written.')
-    parser.add_argument(
-        '--sort-key', 
-        action='store', 
-        dest='sort_key', 
-        help='Optional. The key in the VM dict by which \
-        to sort the VMs.')
+    parser.add_argument('--sort-key', action='store', 
+        dest='sort_key', help='Optional. The key in the VM \
+        dict by which to sort the VMs.')
     args = parser.parse_args()
-    output_dir = args.output_dir
-    inventory_creator = CreateOrkaAnsibleInventory(output_dir)
+    inventory_creator = CreateOrkaAnsibleInventory(args.output_dir)
     inventory_creator.get_current_vm_data()
     if args.sort_key:
         inventory_creator.sort_vm_data(args.sort_key)
