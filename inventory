@@ -1,0 +1,10 @@
+[all:vars]
+anisble_connection=ssh
+ansible_ssh_user=<ssh user>
+ansible_ssh_pass=<ssh password>
+
+[hosts]
+ansible-controller   ansible_ssh_port=8822   ansible_ssh_host=10.10.10.16
+ansible-target   ansible_ssh_port=8823   ansible_ssh_host=10.10.10.16
+ansible-target-ii   ansible_ssh_port=8822   ansible_ssh_host=10.10.10.15
+target-iii   ansible_ssh_port=8823   ansible_ssh_host=10.10.10.15
