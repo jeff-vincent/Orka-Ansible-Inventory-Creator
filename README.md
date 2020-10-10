@@ -17,4 +17,4 @@ Create an inventory in which VMs are sorted by name.
 
 ## Available `sort_key` Values
 
-owner,virtual_machine_name,virtual_machine_id,node_location,node_status,virtual_machine_ip,vnc_port,screen_sharing_port,ssh_port,cpu,vcpu,RAM,base_image,image,configuration_template,vm_status 
+`owner`,`virtual_machine_name`,`virtual_machine_id`,`node_location,node_status`,`virtual_machine_ip`,`vnc_port`,`screen_sharing_port`,`ssh_port`,`cpu`,`vcpu`,`RAM`,`base_image`,`image`,`configuration_template`,`vm_status` 
