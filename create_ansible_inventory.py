@@ -3,22 +3,14 @@ import ast
 import os
 import subprocess
 
-#########Available sort_key values:####################
-#######################################################
-# owner,virtual_machine_name,virtual_machine_id,
-# node_location,node_status,virtual_machine_ip,
-# vnc_port,screen_sharing_port,ssh_port,cpu,
-# vcpu,RAM,base_image,image,
-# configuration_template,vm_status 
 
-
-class CreateOrkaAnsibleInventory:
+class OrkaAnsibleInventory:
 
     def __init__(self, output_dir):
         self.vm_data = None
         self.sorted_data = None
         self.output_dir = output_dir
-        self.connection_info = ('[all:vars]\nanisble_connection=ssh\n'
+        self.inventory_header = ('[all:vars]\nanisble_connection=ssh\n'
                                 'ansible_ssh_user=<ssh user>\n'
                                 'ansible_ssh_pass=<ssh password>\n\n'
                                 '[hosts]\n')
@@ -71,7 +63,7 @@ class CreateOrkaAnsibleInventory:
         """
         inventory_path = os.path.join(self.output_dir, 'inventory')
         with open(inventory_path, 'w+') as f:
-            f.write(self.connection_info)
+            f.write(self.inventory_header)
             for vm in data:
                 line = '{}   ansible_ssh_port={}   ansible_ssh_host={}'.format(
                     vm['virtual_machine_name'],
@@ -89,7 +81,7 @@ if __name__ == '__main__':
         dest='sort_key', help='Optional. The key in the VM \
         dict by which to sort the VMs.')
     args = parser.parse_args()
-    inventory_creator = CreateOrkaAnsibleInventory(args.output_dir)
+    inventory_creator = OrkaAnsibleInventory(args.output_dir)
     inventory_creator.get_current_vm_data()
     if args.sort_key:
         inventory_creator.sort_vm_data(args.sort_key)
@@ -98,6 +90,3 @@ if __name__ == '__main__':
     else:
         inventory_creator.write_inventory(
             inventory_creator.vm_data)
-
-
-
