@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import argparse
 import ast
 import json
 import os
@@ -72,8 +73,13 @@ class OrkaAnsibleInventory:
 
 
 if __name__ == '__main__':
-    inventory_creator = OrkaAnsibleInventory()
-    inventory_creator.get_current_vm_data()
-    inventory_creator.get_deployed_vms()
-    inventory_creator.create_inventory()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--list', help='list deployed VMs',
+                    action='store_true')
+    args = parser.parse_args()
+    if args.list:
+        inventory_creator = OrkaAnsibleInventory()
+        inventory_creator.get_current_vm_data()
+        inventory_creator.get_deployed_vms()
+        inventory_creator.create_inventory()
 
