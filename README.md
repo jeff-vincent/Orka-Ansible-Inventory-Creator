@@ -10,4 +10,4 @@ It should print JSON output representing your current Orka inventory.
 6. Test the dynamic inventory by running: `sudo ansible all -i orka_inventory.py -m ping`
 
 Troubleshooting:
-If the file appears to run, but produces no output
+If the file appears to run, but produces no output check that python3 exists at `/usr/bin/` or adjust the shebang as needed. 
