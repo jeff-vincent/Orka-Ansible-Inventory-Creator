@@ -42,7 +42,7 @@ class OrkaAnsibleInventory:
             [i for i in self.vm_data if i['vm_deployment_status'] == 'Deployed']
 
 
-    # def build_vars(self):
+    # def _build_vars(self):
     #     """Build the vars dict to pass to Ansible"""
     #     ansible_ssh_user = os.environ.get('ANSIBLE_SSH_USER')
     #     ansible_ssh_pass = os.environ.get('ANSIBLE_SSH_PASS')
@@ -58,19 +58,20 @@ class OrkaAnsibleInventory:
     def create_inventory(self):
         """Create the inventory object to return to Ansible."""
         hosts = []
+        ansible_ssh_user = os.environ.get('ANSIBLE_SSH_USER')
+        ansible_ssh_pass = os.environ.get('ANSIBLE_SSH_PASS')
         for i in self.filtered_data:
-            ip_address = str((i['status'][0]['virtual_machine_ip']))
+            ip_address = i['status'][0]['virtual_machine_ip']
             hosts.append(ip_address)
             self.inventory['_meta']['hostvars'][ip_address] = \
                 {'ansible_ssh_port': i['status'][0]['ssh_port'],
-                'ansible_ssh_user': os.environ.get('ANSIBLE_SSH_USER'),
-                'ansible_ssh_pass': os.environ.get('ANSIBLE_SSH_PASS'),
+                'ansible_ssh_user': ansible_ssh_user,
+                'ansible_ssh_pass': ansible_ssh_pass,
                 'ansible_connection': 'ssh'}
 
         self.inventory['group']['hosts'] = hosts
-        # varss = self.build_vars()
+        # varss = self._build_vars()
         # self.inventory['vars'] = varss
-
         print(json.dumps(self.inventory))
         return json.dumps(self.inventory)
 

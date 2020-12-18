@@ -1,28 +1,13 @@
-# Orka-Ansible-Inventory-Creator
-
-A simple script to generate an Ansible inventory for Orka VMs. 
+# Orka Ansible Dynamic Inventory Script
 
 ## Usage
+1. Log in to the Orka CLI
+2. Clone the repo
+3. Test the script by running: `python3 orka_inventory.py`
+It should print JSON output representing your current Orka inventory.
+4. Make the file executable by running: `chmod +x orka_inventory.py`
+5. Set the environment variables ANSIBLE_SSH_USER and ANSIBLE_SSH_PASS
+6. Test the dynamic inventory by running: `sudo ansible all -i create_ansible_inventory.py -m ping`
 
-1. Install and set up the Orka CLI.
-1. Run `python3 create_ansible_inventory.py path/to/output_dir`
-
-## Examples
-
-Create an unsorted inventory of all VMs associated with CLI user.
-
-```
-python3 create_ansible_inventory.py ~/MacStadium/ansible_dir
-```
-
-Create an inventory in which VMs are sorted by name.
-
-```
-python3 create_ansible_inventory.py ~/MacStadium/ansible_dir --sort-key virtual_machine_name
-```
-
-## Available `sort_key` Values
-
-`owner`,`virtual_machine_name`,`virtual_machine_id`,`node_location`,
-`node_status`,`virtual_machine_ip`,`vnc_port`,`screen_sharing_port`,`ssh_port`,
-`cpu`,`vcpu`,`RAM`,`base_image`,`image`,`configuration_template`,`vm_status` 
+Troubleshooting:
+If the file appears to run, but produces no output
