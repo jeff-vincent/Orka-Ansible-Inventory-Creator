@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 
 import argparse
 import ast
@@ -47,8 +47,9 @@ class OrkaAnsibleInventory:
         Args:
             name_contains: string: partial match sort key for deployed VMs.
         """
+        nc = name_contains.lower()
         self.filtered_data = \
-            [i for i in self.filtered_data if name_contains.lower() in i['status'][0]['virtual_machine_name'].lower()]
+            [i for i in self.filtered_data if nc in i['status'][0]['virtual_machine_name'].lower()]
 
     # def _build_vars(self):
     #     """Build the vars dict to pass to Ansible"""
