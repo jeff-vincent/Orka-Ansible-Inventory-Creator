@@ -93,16 +93,10 @@ if __name__ == '__main__':
     name_contains = os.environ.get('ANSIBLE_NAME_CONTAINS')
 
     if args.list:
+        inventory_creator = OrkaAnsibleInventory()
+        inventory_creator.get_current_vm_data()
+        inventory_creator.get_deployed_vms()
         if name_contains:
-            inventory_creator = OrkaAnsibleInventory()
-            inventory_creator.get_current_vm_data()
-            inventory_creator.get_deployed_vms()
             inventory_creator.get_name_contains_vms(name_contains)
-            inventory_creator.create_inventory()
-
-        else:
-            inventory_creator = OrkaAnsibleInventory()
-            inventory_creator.get_current_vm_data()
-            inventory_creator.get_deployed_vms()
-            inventory_creator.create_inventory()
+        inventory_creator.create_inventory()
 
