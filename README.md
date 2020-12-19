@@ -3,7 +3,7 @@
 ## Usage
 1. Log in to the Orka CLI
 2. Clone the repo
-3. Test the script by running: `python3 orka_inventory.py`
+3. Test the script by running: `python3 orka_inventory.py --list`
 It should print JSON output representing your current Orka inventory.
 4. Make the file executable by running: `chmod +x orka_inventory.py`
 5. Set the environment variables `ANSIBLE_SSH_USER` and `ANSIBLE_SSH_PASS`
