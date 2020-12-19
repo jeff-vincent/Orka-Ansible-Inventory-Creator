@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 
 import argparse
 import ast
@@ -42,6 +42,14 @@ class OrkaAnsibleInventory:
             [i for i in self.vm_data if i['vm_deployment_status'] == 'Deployed']
 
 
+    def get_name_contains_vms(self, name_contains):
+        """Filter current VM data to isolate VMs by partial name match.
+        Args:
+            name_contains: string: partial match sort key for deployed VMs.
+        """
+        self.filtered_data = \
+            [i for i in self.filtered_data if name_contains.lower() in i['status'][0]['virtual_machine_name'].lower()]
+
     # def _build_vars(self):
     #     """Build the vars dict to pass to Ansible"""
     #     ansible_ssh_user = os.environ.get('ANSIBLE_SSH_USER')
@@ -60,6 +68,7 @@ class OrkaAnsibleInventory:
         hosts = []
         ansible_ssh_user = os.environ.get('ANSIBLE_SSH_USER')
         ansible_ssh_pass = os.environ.get('ANSIBLE_SSH_PASS')
+
         for i in self.filtered_data:
             ip_address = i['status'][0]['virtual_machine_ip']
             hosts.append(ip_address)
@@ -81,9 +90,19 @@ if __name__ == '__main__':
     parser.add_argument('--list', help='list deployed VMs',
                     action='store_true')
     args = parser.parse_args()
+    name_contains = os.environ.get('ANSIBLE_NAME_CONTAINS')
+
     if args.list:
-        inventory_creator = OrkaAnsibleInventory()
-        inventory_creator.get_current_vm_data()
-        inventory_creator.get_deployed_vms()
-        inventory_creator.create_inventory()
+        if name_contains:
+            inventory_creator = OrkaAnsibleInventory()
+            inventory_creator.get_current_vm_data()
+            inventory_creator.get_deployed_vms()
+            inventory_creator.get_name_contains_vms(name_contains)
+            inventory_creator.create_inventory()
+
+        else:
+            inventory_creator = OrkaAnsibleInventory()
+            inventory_creator.get_current_vm_data()
+            inventory_creator.get_deployed_vms()
+            inventory_creator.create_inventory()
 
