@@ -20,4 +20,4 @@ Example usage:
 Only running VMs with `prod` in the VM name will be added to the inventory.
 
 ## Troubleshooting:
-If the file appears to run, but produces no output
+If the file appears to run, but produces no output check that `python3` exists at `/usr/bin/`.
