@@ -48,7 +48,7 @@ class OrkaAnsibleInventory:
             host_name: string: the VM name to match.
         """
         self.filtered_data = \
-            [i for i in self.vm_data if host_name in i['status'][0]['virtual_machine_name']]
+            [i for i in self.vm_data if host_name == i['status'][0]['virtual_machine_name']]
 
 
     def get_name_contains_vms(self, name_contains):
@@ -95,26 +95,37 @@ class OrkaAnsibleInventory:
         return json.dumps(self.inventory)
 
 
-if __name__ == '__main__':
+def parse_args():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--list', help='list deployed VMs',
                     action='store_true')
     group.add_argument('--host', help='get host by name', action='store',
                     dest='host_name')
-    args = parser.parse_args()
-    name_contains = os.environ.get('ANSIBLE_NAME_CONTAINS')
+    return parser.parse_args()
+
+
+def main(args, name_contains):
     if args.host_name:
         host_name = args.host_name
         inventory_creator = OrkaAnsibleInventory()
         inventory_creator.get_current_vm_data()
         inventory_creator.get_vm_by_host_name(host_name)
         inventory_creator.create_inventory()
-    if args.list:
+    elif args.list:
         inventory_creator = OrkaAnsibleInventory()
         inventory_creator.get_current_vm_data()
         inventory_creator.get_deployed_vms()
         if name_contains:
             inventory_creator.get_name_contains_vms(name_contains)
         inventory_creator.create_inventory()
+    else:
+        print('Warning: you must pass either `--list` or `--host <hostname>` argument.')
+
+
+if __name__ == '__main__':
+    args = parse_args()
+    name_contains = os.environ.get('ANSIBLE_NAME_CONTAINS')
+    main(args, name_contains)
+
 
