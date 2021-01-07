@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import argparse
-import ast
 import json
 import os
 import subprocess
@@ -32,7 +31,7 @@ class OrkaAnsibleInventory:
             ['orka', 'vm', 'list', '--json'], 
             capture_output=True)
         dict_string = completed_process.stdout.decode('utf-8')
-        data = ast.literal_eval(dict_string)
+        data = json.loads(dict_string)
         self.vm_data = data['virtual_machine_resources']
 
 
